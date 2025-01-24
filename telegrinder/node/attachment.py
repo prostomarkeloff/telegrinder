@@ -5,6 +5,7 @@ from fntypes.option import Nothing, Option, Some
 
 import telegrinder.types
 from telegrinder.node.base import ComposeError, DataNode, ScalarNode
+from telegrinder.node.polymorphic import Polymorphic, impl
 from telegrinder.node.message import MessageNode
 
 
@@ -96,6 +97,26 @@ class SuccessfulPayment(ScalarNode, telegrinder.types.SuccessfulPayment):
         if not attachment.successful_payment:
             raise ComposeError("Attachment is not a successful payment.")
         return attachment.successful_payment.unwrap()
+
+
+class FileId(Polymorphic, str):
+    @impl
+    def compose_document(cls, document: Document) -> str:
+        return document.file_id
+
+    @impl
+    def compose_video(cls, video: Video) -> str:
+        return video.file_id
+
+    @impl
+    def compose_audio(cls, audio: Audio) -> str:
+        return audio.file_id
+
+    @impl
+    def compose_photo(cls, photo: Photo) -> str:
+        # last size is the best resolution
+        return photo.sizes[-1].file_id
+
 
 
 __all__ = (
