@@ -176,6 +176,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         allow_paid_broadcast: bool | None = None,
         business_connection_id: str | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         entities: list[MessageEntity] | None = None,
         link_preview_options: LinkPreviewOptions | None = None,
@@ -185,6 +186,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         protect_content: bool | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
         """Shortcut `API.send_message()`, see the [documentation](https://core.telegram.org/bots/api#sendmessage)
@@ -195,6 +197,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
 
         :param text: Text of the message to be sent, 1-4096 characters after entities parsing.
         :param parse_mode: Mode for parsing entities in the message text. See formatting options formore details.
@@ -210,6 +214,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -227,6 +232,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         allow_paid_broadcast: bool | None = None,
         business_connection_id: str | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         entities: list[MessageEntity] | None = None,
         link_preview_options: LinkPreviewOptions | None = None,
@@ -237,6 +243,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         protect_content: bool | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
         """Shortcut `API.send_message()`, see the [documentation](https://core.telegram.org/bots/api#sendmessage)
@@ -247,6 +254,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
 
         :param text: Text of the message to be sent, 1-4096 characters after entities parsing.
         :param parse_mode: Mode for parsing entities in the message text. See formatting options formore details.
@@ -262,6 +271,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -287,8 +297,10 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         messages in private chats. - Bots granted can_post_messages permissions
         can delete outgoing messages in channels. - If the bot is an administrator
         of a group, it can delete any message there. - If the bot has can_delete_messages
-        permission in a supergroup or a channel, it can delete any message there.
-        Returns True on success."""
+        administrator right in a supergroup or a channel, it can delete any message
+        there. - If the bot has can_manage_direct_messages administrator right
+        in a channel, it can delete any message in the corresponding direct messages
+        chat. Returns True on success."""
         params = compose_method_params(
             params=get_params(locals()),
             update=self,
@@ -353,6 +365,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         allow_paid_broadcast: bool | None = None,
         caption: str | None = None,
         caption_entities: list[MessageEntity] | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         from_chat_id: int | str | None = None,
         message_id: int | None = None,
@@ -362,6 +375,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
         show_caption_above_media: bool | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
+        video_start_timestamp: int | None = None,
         **other: typing.Any,
     ) -> Result[MessageId, APIError]:
         """Shortcut `API.copy_message()`, see the [documentation](https://core.telegram.org/bots/api#copymessage)
@@ -406,9 +421,9 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         """Shortcut `API.set_message_reaction()`, see the [documentation](https://core.telegram.org/bots/api#setmessagereaction)
 
         Use this method to change the chosen reactions on a message. Service messages
-        can't be reacted to. Automatically forwarded messages from a channel to
-        its discussion group have the same available reactions as messages in the
-        channel. Bots can't use paid reactions. Returns True on success."""
+        of some types can't be reacted to. Automatically forwarded messages from
+        a channel to its discussion group have the same available reactions as messages
+        in the channel. Bots can't use paid reactions. Returns True on success."""
         params = compose_method_params(
             params=get_params(locals()),
             update=self,
@@ -426,11 +441,14 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         self,
         chat_id: int | str,
         *,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         from_chat_id: int | str | None = None,
         message_id: int | None = None,
         message_thread_id: int | None = None,
         protect_content: bool | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
+        video_start_timestamp: int | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
         """Shortcut `API.forward_message()`, see the [documentation](https://core.telegram.org/bots/api#forwardmessage)
@@ -442,10 +460,16 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
 
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be forwarded;required if the message is forwarded to a direct messages chat.
+
         :param from_chat_id: Unique identifier for the chat where the original message was sent (or channelusername in the format @channelusername).
+
+        :param video_start_timestamp: New start timestamp for the forwarded video in the message.
 
         :param disable_notification: Sends the message silently. Users will receive a notification with no sound.
         :param protect_content: Protects the contents of the forwarded message from forwarding and saving.
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only.
+
         :param message_id: Message identifier in the chat specified in from_chat_id."""
         params = compose_method_params(
             params=get_params(locals()),
@@ -474,11 +498,11 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
     ) -> Result[bool, "APIError"]:
         """Shortcut `API.pin_chat_message()`, see the [documentation](https://core.telegram.org/bots/api#pinchatmessage)
 
-        Use this method to add a message to the list of pinned messages in a chat. If
-        the chat is not a private chat, the bot must be an administrator in the chat
-        for this to work and must have the 'can_pin_messages' administrator right
-        in a supergroup or 'can_edit_messages' administrator right in a channel.
-        Returns True on success.
+        Use this method to add a message to the list of pinned messages in a chat. In
+        private chats and channel direct messages chats, all non-service messages
+        can be pinned. Conversely, the bot must be an administrator with the 'can_pin_messages'
+        right or the 'can_edit_messages' right to pin messages in groups and channels
+        respectively. Returns True on success.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be pinned.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
@@ -507,10 +531,10 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         """Shortcut `API.unpin_chat_message()`, see the [documentation](https://core.telegram.org/bots/api#unpinchatmessage)
 
         Use this method to remove a message from the list of pinned messages in a chat.
-        If the chat is not a private chat, the bot must be an administrator in the chat
-        for this to work and must have the 'can_pin_messages' administrator right
-        in a supergroup or 'can_edit_messages' administrator right in a channel.
-        Returns True on success.
+        In private chats and channel direct messages chats, all messages can be
+        unpinned. Conversely, the bot must be an administrator with the 'can_pin_messages'
+        right or the 'can_edit_messages' right to unpin messages in groups and
+        channels respectively. Returns True on success.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be unpinned.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
@@ -538,6 +562,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         caption: str | None = None,
         caption_entities: list[MessageEntity] | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         duration: int | None = None,
         message_effect_id: str | None = None,
@@ -547,6 +572,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         protect_content: bool | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         thumbnail: InputFile | str | None = None,
         title: str | None = None,
         **other: typing.Any,
@@ -563,6 +589,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
 
         :param audio: Audio file to send. Pass a file_id as String to send an audio file that existson the Telegram servers (recommended), pass an HTTP URL as a String for Telegramto get an audio file from the Internet, or upload a new one using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param caption: Audio caption, 0-1024 characters after entities parsing.
@@ -585,6 +613,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -604,6 +633,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         caption: str | None = None,
         caption_entities: list[MessageEntity] | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         duration: int | None = None,
         has_spoiler: bool | None = None,
@@ -615,6 +645,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
         show_caption_above_media: bool | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         thumbnail: InputFile | str | None = None,
         width: int | None = None,
         **other: typing.Any,
@@ -629,6 +660,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
 
         :param animation: Animation to send. Pass a file_id as String to send an animation that existson the Telegram servers (recommended), pass an HTTP URL as a String for Telegramto get an animation from the Internet, or upload a new animation using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param duration: Duration of sent animation in seconds.
@@ -654,6 +687,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -673,6 +707,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         caption: str | None = None,
         caption_entities: list[MessageEntity] | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_content_type_detection: bool | None = None,
         disable_notification: bool | None = None,
         message_effect_id: str | None = None,
@@ -682,6 +717,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
         show_caption_above_media: bool | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         thumbnail: InputFile | str | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
@@ -695,6 +731,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
 
         :param document: File to send. Pass a file_id as String to send a file that exists on the Telegramservers (recommended), pass an HTTP URL as a String for Telegram to get afile from the Internet, or upload a new one using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param thumbnail: Thumbnail of the file sent; can be ignored if thumbnail generation for thefile is supported server-side. The thumbnail should be in JPEG format andless than 200 kB in size. A thumbnail's width and height should not exceed320. Ignored if the file is not uploaded using multipart/form-data. Thumbnailscan't be reused and can be only uploaded as a new file, so you can pass `attach://<file_attach_name>`if the thumbnail was uploaded using multipart/form-data under <file_attach_name>.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
@@ -713,6 +751,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -732,6 +771,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         caption: str | None = None,
         caption_entities: list[MessageEntity] | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         has_spoiler: bool | None = None,
         message_effect_id: str | None = None,
@@ -741,6 +781,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
         show_caption_above_media: bool | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
         """Shortcut `API.send_photo()`, see the [documentation](https://core.telegram.org/bots/api#sendphoto)
@@ -751,6 +792,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
 
         :param photo: Photo to send. Pass a file_id as String to send a photo that exists on the Telegramservers (recommended), pass an HTTP URL as a String for Telegram to get aphoto from the Internet, or upload a new photo using multipart/form-data.The photo must be at most 10 MB in size. The photo's width and height must notexceed 10000 in total. Width and height ratio must be at most 20. More informationon Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param caption: Photo caption (may also be used when resending photos by file_id), 0-1024characters after entities parsing.
@@ -770,6 +813,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -787,6 +831,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         allow_paid_broadcast: bool | None = None,
         business_connection_id: str | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         emoji: str | None = None,
         message_effect_id: str | None = None,
@@ -794,6 +839,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         protect_content: bool | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
         """Shortcut `API.send_sticker()`, see the [documentation](https://core.telegram.org/bots/api#sendsticker)
@@ -806,6 +852,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
 
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
         :param sticker: Sticker to send. Pass a file_id as String to send a file that exists on theTelegram servers (recommended), pass an HTTP URL as a String for Telegramto get a .WEBP sticker from the Internet, or upload a new .WEBP, .TGS, or .WEBMsticker using multipart/form-data. More information on Sending Files:https://core.telegram.org/bots/api#sending-files. Video and animatedstickers can't be sent via an HTTP URL.
 
         :param emoji: Emoji associated with the sticker; only for just uploaded stickers.
@@ -817,6 +865,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -836,6 +885,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         caption: str | None = None,
         caption_entities: list[MessageEntity] | None = None,
         chat_id: int | str | None = None,
+        cover: InputFile | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         duration: int | None = None,
         emoji: str | None = None,
@@ -847,6 +898,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
         show_caption_above_media: bool | None = None,
+        start_timestamp: int | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         supports_streaming: bool | None = None,
         thumbnail: InputFile | str | None = None,
         width: int | None = None,
@@ -864,6 +917,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
 
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
         :param video: Video to send. Pass a file_id as String to send a video that exists on the Telegramservers (recommended), pass an HTTP URL as a String for Telegram to get avideo from the Internet, or upload a new video using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param duration: Duration of sent video in seconds.
 
@@ -872,6 +927,9 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         :param height: Video height.
 
         :param thumbnail: Thumbnail of the file sent; can be ignored if thumbnail generation for thefile is supported server-side. The thumbnail should be in JPEG format andless than 200 kB in size. A thumbnail's width and height should not exceed320. Ignored if the file is not uploaded using multipart/form-data. Thumbnailscan't be reused and can be only uploaded as a new file, so you can pass `attach://<file_attach_name>`if the thumbnail was uploaded using multipart/form-data under <file_attach_name>.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
+        :param cover: Cover for the video in the message. Pass a file_id to send a file that existson the Telegram servers (recommended), pass an HTTP URL for Telegram toget a file from the Internet, or pass `attach://<file_attach_name>` toupload a new one using multipart/form-data under <file_attach_name>name. More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
+        :param start_timestamp: Start timestamp for the video in the message.
+
         :param caption: Video caption (may also be used when resending videos by file_id), 0-1024characters after entities parsing.
 
         :param parse_mode: Mode for parsing entities in the video caption. See formatting optionsfor more details.
@@ -891,6 +949,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -908,6 +967,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         allow_paid_broadcast: bool | None = None,
         business_connection_id: str | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         duration: int | None = None,
         length: int | None = None,
@@ -916,6 +976,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         protect_content: bool | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         thumbnail: InputFile | str | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
@@ -929,6 +990,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
 
         :param video_note: Video note to send. Pass a file_id as String to send a video note that existson the Telegram servers (recommended) or upload a new video using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.Sending video notes by a URL is currently unsupported.
 
@@ -944,6 +1007,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -963,6 +1027,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         caption: str | None = None,
         caption_entities: list[MessageEntity] | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         duration: int | None = None,
         message_effect_id: str | None = None,
@@ -971,6 +1036,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         protect_content: bool | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
         """Shortcut `API.send_voice()`, see the [documentation](https://core.telegram.org/bots/api#sendvoice)
@@ -986,6 +1052,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
 
         :param voice: Audio file to send. Pass a file_id as String to send a file that exists on theTelegram servers (recommended), pass an HTTP URL as a String for Telegramto get a file from the Internet, or upload a new one using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param caption: Voice message caption, 0-1024 characters after entities parsing.
@@ -1003,6 +1071,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -1047,7 +1116,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         Use this method to send a native poll. On success, the sent Message is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername). Polls can't be sent to channel directmessages chats.
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
 
@@ -1057,7 +1126,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param question_entities: A JSON-serialized list of special entities that appear in the poll question.It can be specified instead of question_parse_mode.
 
-        :param options: A JSON-serialized list of 2-10 answer options.
+        :param options: A JSON-serialized list of 2-12 answer options.
 
         :param is_anonymous: True, if the poll needs to be anonymous, defaults to True.
 
@@ -1106,6 +1175,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         allow_paid_broadcast: bool | None = None,
         business_connection_id: str | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         foursquare_id: str | None = None,
         foursquare_type: str | None = None,
@@ -1116,6 +1186,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         protect_content: bool | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
         """Shortcut `API.send_venue()`, see the [documentation](https://core.telegram.org/bots/api#sendvenue)
@@ -1127,6 +1198,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
 
         :param latitude: Latitude of the venue.
 
@@ -1151,6 +1224,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -1168,12 +1242,14 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         allow_paid_broadcast: bool | None = None,
         business_connection_id: str | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         message_effect_id: str | None = None,
         message_thread_id: int | None = None,
         protect_content: bool | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
         """Shortcut `API.send_dice()`, see the [documentation](https://core.telegram.org/bots/api#senddice)
@@ -1186,6 +1262,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
 
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
         :param emoji: Emoji on which the dice throw animation is based. Currently, must be oneof `🎲`, `🎯`, `🏀`, `⚽`, `🎳`, or `🎰`. Dice can have values 1-6 for `🎲`, `🎯` and`🎳`, values 1-5 for `🏀` and `⚽`, and values 1-64 for `🎰`. Defaults to `🎲`.
         :param disable_notification: Sends the message silently. Users will receive a notification with no sound.
         :param protect_content: Protects the contents of the sent message from forwarding.
@@ -1194,6 +1272,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -1224,7 +1303,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         Use this method to send a game. On success, the sent Message is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat.
+        :param chat_id: Unique identifier for the target chat. Games can't be sent to channel directmessages chats and channel chats.
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
 
@@ -1258,6 +1337,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         allow_paid_broadcast: bool | None = None,
         business_connection_id: str | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         is_flexible: bool | None = None,
         max_tip_amount: int | None = None,
@@ -1279,6 +1359,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         send_email_to_provider: bool | None = None,
         send_phone_number_to_provider: bool | None = None,
         start_parameter: str | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         suggested_tip_amounts: list[int] | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
@@ -1310,7 +1391,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         bot will take a noticeable amount of time to arrive.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the actionwill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target supergroup(in the format @supergroupusername). Channel chats and channel directmessages chats aren't supported.
 
         :param message_thread_id: Unique identifier for the target message thread; for supergroups only.
         :param action: Type of action to broadcast. Choose one, depending on what the user is aboutto receive: typing for text messages, upload_photo for photos, record_videoor upload_video for videos, record_voice or upload_voice for voice notes,upload_document for general files, choose_sticker for stickers, find_locationfor location data, record_video_note or upload_video_note for videonotes."""
@@ -1327,6 +1408,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         allow_paid_broadcast: bool | None = None,
         business_connection_id: str | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         media_type: MediaType | None = None,
         message_effect_id: str | None = None,
@@ -1339,12 +1421,15 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         Use this method to send a group of photos, videos, documents or audios as
         an album. Documents and audio files can be only grouped in an album with messages
-        of the same type. On success, an array of Messages that were sent is returned.
+        of the same type. On success, an array of Message objects that were sent is
+        returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the messages will be sent;required if the messages are sent to a direct messages chat.
 
         :param media: A JSON-serialized array describing messages to be sent, must include 2-10items.
 
@@ -1372,6 +1457,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         allow_paid_broadcast: bool | None = None,
         business_connection_id: str | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         heading: int | None = None,
         horizontal_accuracy: float | None = None,
@@ -1382,6 +1468,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         proximity_alert_radius: int | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
         """Shortcut `API.send_location()`, see the [documentation](https://core.telegram.org/bots/api#sendlocation)
@@ -1392,6 +1479,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
 
         :param latitude: Latitude of the location.
 
@@ -1410,6 +1499,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -1428,6 +1518,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         allow_paid_broadcast: bool | None = None,
         business_connection_id: str | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         last_name: str | None = None,
         message_effect_id: str | None = None,
@@ -1435,6 +1526,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         protect_content: bool | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         vcard: str | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
@@ -1446,6 +1538,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
 
         :param phone_number: Contact's phone number.
 
@@ -1462,6 +1556,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -1481,6 +1576,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         caption: str | None = None,
         caption_entities: list[MessageEntity] | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         duration: int | None = None,
         message_effect_id: str | None = None,
@@ -1490,6 +1586,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         protect_content: bool | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         thumbnail: InputFile | str | None = None,
         title: str | None = None,
         **other: typing.Any,
@@ -1506,6 +1603,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
 
         :param audio: Audio file to send. Pass a file_id as String to send an audio file that existson the Telegram servers (recommended), pass an HTTP URL as a String for Telegramto get an audio file from the Internet, or upload a new one using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param caption: Audio caption, 0-1024 characters after entities parsing.
@@ -1528,6 +1627,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -1547,6 +1647,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         caption: str | None = None,
         caption_entities: list[MessageEntity] | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         duration: int | None = None,
         has_spoiler: bool | None = None,
@@ -1558,6 +1659,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
         show_caption_above_media: bool | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         thumbnail: InputFile | str | None = None,
         width: int | None = None,
         **other: typing.Any,
@@ -1572,6 +1674,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
 
         :param animation: Animation to send. Pass a file_id as String to send an animation that existson the Telegram servers (recommended), pass an HTTP URL as a String for Telegramto get an animation from the Internet, or upload a new animation using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param duration: Duration of sent animation in seconds.
@@ -1597,6 +1701,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -1616,6 +1721,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         caption: str | None = None,
         caption_entities: list[MessageEntity] | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_content_type_detection: bool | None = None,
         disable_notification: bool | None = None,
         message_effect_id: str | None = None,
@@ -1625,6 +1731,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
         show_caption_above_media: bool | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         thumbnail: InputFile | str | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
@@ -1638,6 +1745,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
 
         :param document: File to send. Pass a file_id as String to send a file that exists on the Telegramservers (recommended), pass an HTTP URL as a String for Telegram to get afile from the Internet, or upload a new one using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param thumbnail: Thumbnail of the file sent; can be ignored if thumbnail generation for thefile is supported server-side. The thumbnail should be in JPEG format andless than 200 kB in size. A thumbnail's width and height should not exceed320. Ignored if the file is not uploaded using multipart/form-data. Thumbnailscan't be reused and can be only uploaded as a new file, so you can pass `attach://<file_attach_name>`if the thumbnail was uploaded using multipart/form-data under <file_attach_name>.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
@@ -1656,6 +1765,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -1675,6 +1785,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         caption: str | None = None,
         caption_entities: list[MessageEntity] | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         has_spoiler: bool | None = None,
         message_effect_id: str | None = None,
@@ -1684,6 +1795,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
         show_caption_above_media: bool | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
         """Shortcut `API.send_photo()`, see the [documentation](https://core.telegram.org/bots/api#sendphoto)
@@ -1694,6 +1806,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
 
         :param photo: Photo to send. Pass a file_id as String to send a photo that exists on the Telegramservers (recommended), pass an HTTP URL as a String for Telegram to get aphoto from the Internet, or upload a new photo using multipart/form-data.The photo must be at most 10 MB in size. The photo's width and height must notexceed 10000 in total. Width and height ratio must be at most 20. More informationon Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param caption: Photo caption (may also be used when resending photos by file_id), 0-1024characters after entities parsing.
@@ -1713,6 +1827,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -1730,6 +1845,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         allow_paid_broadcast: bool | None = None,
         business_connection_id: str | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         emoji: str | None = None,
         message_effect_id: str | None = None,
@@ -1737,6 +1853,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         protect_content: bool | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
         """Shortcut `API.send_sticker()`, see the [documentation](https://core.telegram.org/bots/api#sendsticker)
@@ -1749,6 +1866,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
 
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
         :param sticker: Sticker to send. Pass a file_id as String to send a file that exists on theTelegram servers (recommended), pass an HTTP URL as a String for Telegramto get a .WEBP sticker from the Internet, or upload a new .WEBP, .TGS, or .WEBMsticker using multipart/form-data. More information on Sending Files:https://core.telegram.org/bots/api#sending-files. Video and animatedstickers can't be sent via an HTTP URL.
 
         :param emoji: Emoji associated with the sticker; only for just uploaded stickers.
@@ -1760,6 +1879,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -1779,6 +1899,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         caption: str | None = None,
         caption_entities: list[MessageEntity] | None = None,
         chat_id: int | str | None = None,
+        cover: InputFile | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         duration: int | None = None,
         emoji: str | None = None,
@@ -1790,6 +1912,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
         show_caption_above_media: bool | None = None,
+        start_timestamp: int | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         supports_streaming: bool | None = None,
         thumbnail: InputFile | str | None = None,
         width: int | None = None,
@@ -1807,6 +1931,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
 
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
         :param video: Video to send. Pass a file_id as String to send a video that exists on the Telegramservers (recommended), pass an HTTP URL as a String for Telegram to get avideo from the Internet, or upload a new video using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param duration: Duration of sent video in seconds.
 
@@ -1815,6 +1941,9 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         :param height: Video height.
 
         :param thumbnail: Thumbnail of the file sent; can be ignored if thumbnail generation for thefile is supported server-side. The thumbnail should be in JPEG format andless than 200 kB in size. A thumbnail's width and height should not exceed320. Ignored if the file is not uploaded using multipart/form-data. Thumbnailscan't be reused and can be only uploaded as a new file, so you can pass `attach://<file_attach_name>`if the thumbnail was uploaded using multipart/form-data under <file_attach_name>.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
+        :param cover: Cover for the video in the message. Pass a file_id to send a file that existson the Telegram servers (recommended), pass an HTTP URL for Telegram toget a file from the Internet, or pass `attach://<file_attach_name>` toupload a new one using multipart/form-data under <file_attach_name>name. More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
+        :param start_timestamp: Start timestamp for the video in the message.
+
         :param caption: Video caption (may also be used when resending videos by file_id), 0-1024characters after entities parsing.
 
         :param parse_mode: Mode for parsing entities in the video caption. See formatting optionsfor more details.
@@ -1834,6 +1963,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -1851,6 +1981,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         allow_paid_broadcast: bool | None = None,
         business_connection_id: str | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         duration: int | None = None,
         length: int | None = None,
@@ -1859,6 +1990,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         protect_content: bool | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         thumbnail: InputFile | str | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
@@ -1872,6 +2004,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
 
         :param video_note: Video note to send. Pass a file_id as String to send a video note that existson the Telegram servers (recommended) or upload a new video using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.Sending video notes by a URL is currently unsupported.
 
@@ -1887,6 +2021,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -1906,6 +2041,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         caption: str | None = None,
         caption_entities: list[MessageEntity] | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         duration: int | None = None,
         message_effect_id: str | None = None,
@@ -1914,6 +2050,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         protect_content: bool | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
         """Shortcut `API.send_voice()`, see the [documentation](https://core.telegram.org/bots/api#sendvoice)
@@ -1929,6 +2066,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
 
         :param voice: Audio file to send. Pass a file_id as String to send a file that exists on theTelegram servers (recommended), pass an HTTP URL as a String for Telegramto get a file from the Internet, or upload a new one using multipart/form-data.More information on Sending Files: https://core.telegram.org/bots/api#sending-files.
         :param caption: Voice message caption, 0-1024 characters after entities parsing.
@@ -1946,6 +2085,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -1990,7 +2130,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         Use this method to send a native poll. On success, the sent Message is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername). Polls can't be sent to channel directmessages chats.
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
 
@@ -2000,7 +2140,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param question_entities: A JSON-serialized list of special entities that appear in the poll question.It can be specified instead of question_parse_mode.
 
-        :param options: A JSON-serialized list of 2-10 answer options.
+        :param options: A JSON-serialized list of 2-12 answer options.
 
         :param is_anonymous: True, if the poll needs to be anonymous, defaults to True.
 
@@ -2049,6 +2189,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         allow_paid_broadcast: bool | None = None,
         business_connection_id: str | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         foursquare_id: str | None = None,
         foursquare_type: str | None = None,
@@ -2059,6 +2200,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         protect_content: bool | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
         """Shortcut `API.send_venue()`, see the [documentation](https://core.telegram.org/bots/api#sendvenue)
@@ -2070,6 +2212,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
 
         :param latitude: Latitude of the venue.
 
@@ -2094,6 +2238,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -2111,12 +2256,14 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         allow_paid_broadcast: bool | None = None,
         business_connection_id: str | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         message_effect_id: str | None = None,
         message_thread_id: int | None = None,
         protect_content: bool | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
         """Shortcut `API.send_dice()`, see the [documentation](https://core.telegram.org/bots/api#senddice)
@@ -2129,6 +2276,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
 
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
+
         :param emoji: Emoji on which the dice throw animation is based. Currently, must be oneof `🎲`, `🎯`, `🏀`, `⚽`, `🎳`, or `🎰`. Dice can have values 1-6 for `🎲`, `🎯` and`🎳`, values 1-5 for `🏀` and `⚽`, and values 1-64 for `🎰`. Defaults to `🎲`.
         :param disable_notification: Sends the message silently. Users will receive a notification with no sound.
         :param protect_content: Protects the contents of the sent message from forwarding.
@@ -2137,6 +2286,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -2167,7 +2317,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         Use this method to send a game. On success, the sent Message is returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
-        :param chat_id: Unique identifier for the target chat.
+        :param chat_id: Unique identifier for the target chat. Games can't be sent to channel directmessages chats and channel chats.
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
 
@@ -2201,6 +2351,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         allow_paid_broadcast: bool | None = None,
         business_connection_id: str | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         is_flexible: bool | None = None,
         max_tip_amount: int | None = None,
@@ -2222,6 +2373,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         send_email_to_provider: bool | None = None,
         send_phone_number_to_provider: bool | None = None,
         start_parameter: str | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         suggested_tip_amounts: list[int] | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
@@ -2245,6 +2397,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         allow_paid_broadcast: bool | None = None,
         business_connection_id: str | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         message_effect_id: str | None = None,
         message_thread_id: int | None = None,
@@ -2256,12 +2409,15 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         Use this method to send a group of photos, videos, documents or audios as
         an album. Documents and audio files can be only grouped in an album with messages
-        of the same type. On success, an array of Messages that were sent is returned.
+        of the same type. On success, an array of Message objects that were sent is
+        returned.
         :param business_connection_id: Unique identifier of the business connection on behalf of which the messagewill be sent.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the messages will be sent;required if the messages are sent to a direct messages chat.
 
         :param media: A JSON-serialized array describing messages to be sent, must include 2-10items.
 
@@ -2289,6 +2445,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         allow_paid_broadcast: bool | None = None,
         business_connection_id: str | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         heading: int | None = None,
         horizontal_accuracy: float | None = None,
@@ -2299,6 +2456,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         proximity_alert_radius: int | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
         """Shortcut `API.send_location()`, see the [documentation](https://core.telegram.org/bots/api#sendlocation)
@@ -2309,6 +2467,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
 
         :param latitude: Latitude of the location.
 
@@ -2327,6 +2487,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
@@ -2345,6 +2506,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         allow_paid_broadcast: bool | None = None,
         business_connection_id: str | None = None,
         chat_id: int | str | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         last_name: str | None = None,
         message_effect_id: str | None = None,
@@ -2352,6 +2514,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         protect_content: bool | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         reply_parameters: ReplyParameters | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         vcard: str | None = None,
         **other: typing.Any,
     ) -> Result[MessageCute, APIError]:
@@ -2363,6 +2526,8 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
         :param chat_id: Unique identifier for the target chat or username of the target channel(in the format @channelusername).
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; forforum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent;required if the message is sent to a direct messages chat.
 
         :param phone_number: Contact's phone number.
 
@@ -2379,6 +2544,7 @@ class MessageCute(BaseCute[Message], Message, kw_only=True):
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for privatechats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested postto send; for direct messages chats only. If the message is sent as a replyto another suggested post, then that suggested post is automatically declined.
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inlinekeyboard, custom reply keyboard, instructions to remove a reply keyboardor to force a reply from the user."""
