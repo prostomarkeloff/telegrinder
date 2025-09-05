@@ -14,7 +14,7 @@ if typing.TYPE_CHECKING:
 
 
 class APIMethods[HTTPClient: ABCClient]:
-    """Telegram Bot API methods version 8.2, released `January 1, 2025`."""
+    """Telegram Bot API methods version 9.2, released `August 15, 2025`."""
 
     default_params = ProxiedDict(
         typing.TypedDict(
@@ -218,6 +218,7 @@ class APIMethods[HTTPClient: ABCClient]:
         text: str,
         business_connection_id: str | None = None,
         message_thread_id: int | None = None,
+        direct_messages_topic_id: int | None = None,
         parse_mode: str | None = default_params["parse_mode"],
         entities: list[MessageEntity] | None = None,
         link_preview_options: LinkPreviewOptions | None = None,
@@ -225,6 +226,7 @@ class APIMethods[HTTPClient: ABCClient]:
         protect_content: bool | None = None,
         allow_paid_broadcast: bool | None = None,
         message_effect_id: str | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         reply_parameters: ReplyParameters | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         **other: typing.Any,
@@ -241,6 +243,9 @@ class APIMethods[HTTPClient: ABCClient]:
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
         forum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
+        required if the message is sent to a direct messages chat.
 
         :param text: Text of the message to be sent, 1-4096 characters after entities parsing. \
 
@@ -263,6 +268,10 @@ class APIMethods[HTTPClient: ABCClient]:
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for private \
         chats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested post \
+        to send; for direct messages chats only. If the message is sent as a reply \
+        to another suggested post, then that suggested post is automatically declined. \
+
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inline \
@@ -283,8 +292,11 @@ class APIMethods[HTTPClient: ABCClient]:
         from_chat_id: int | str,
         message_id: int,
         message_thread_id: int | None = None,
+        direct_messages_topic_id: int | None = None,
+        video_start_timestamp: int | None = None,
         disable_notification: bool | None = None,
         protect_content: bool | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         **other: typing.Any,
     ) -> Result[Message, APIError]:
         """Method `forwardMessage`, see the [documentation](https://core.telegram.org/bots/api#forwardmessage)
@@ -299,12 +311,20 @@ class APIMethods[HTTPClient: ABCClient]:
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
         forum supergroups only.
 
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be forwarded; \
+        required if the message is forwarded to a direct messages chat.
+
         :param from_chat_id: Unique identifier for the chat where the original message was sent (or channel \
         username in the format @channelusername).
+
+        :param video_start_timestamp: New start timestamp for the forwarded video in the message.
 
         :param disable_notification: Sends the message silently. Users will receive a notification with no sound. \
 
         :param protect_content: Protects the contents of the forwarded message from forwarding and saving. \
+
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested post \
+        to send; for direct messages chats only.
 
         :param message_id: Message identifier in the chat specified in from_chat_id.
         """
@@ -322,6 +342,7 @@ class APIMethods[HTTPClient: ABCClient]:
         from_chat_id: int | str,
         message_ids: list[int],
         message_thread_id: int | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         protect_content: bool | None = None,
         **other: typing.Any,
@@ -339,6 +360,9 @@ class APIMethods[HTTPClient: ABCClient]:
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
         forum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the messages will be forwarded; \
+        required if the messages are forwarded to a direct messages chat.
 
         :param from_chat_id: Unique identifier for the chat where the original messages were sent (or \
         channel username in the format @channelusername).
@@ -366,6 +390,8 @@ class APIMethods[HTTPClient: ABCClient]:
         from_chat_id: int | str,
         message_id: int,
         message_thread_id: int | None = None,
+        direct_messages_topic_id: int | None = None,
+        video_start_timestamp: int | None = None,
         caption: str | None = None,
         parse_mode: str | None = default_params["parse_mode"],
         caption_entities: list[MessageEntity] | None = None,
@@ -373,6 +399,7 @@ class APIMethods[HTTPClient: ABCClient]:
         disable_notification: bool | None = None,
         protect_content: bool | None = None,
         allow_paid_broadcast: bool | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         reply_parameters: ReplyParameters | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         **other: typing.Any,
@@ -392,10 +419,15 @@ class APIMethods[HTTPClient: ABCClient]:
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
         forum supergroups only.
 
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
+        required if the message is sent to a direct messages chat.
+
         :param from_chat_id: Unique identifier for the chat where the original message was sent (or channel \
         username in the format @channelusername).
 
         :param message_id: Message identifier in the chat specified in from_chat_id.
+
+        :param video_start_timestamp: New start timestamp for the copied video in the message.
 
         :param caption: New caption for media, 0-1024 characters after entities parsing. If not \
         specified, the original caption is kept.
@@ -417,6 +449,10 @@ class APIMethods[HTTPClient: ABCClient]:
         limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will \
         be withdrawn from the bot's balance.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested post \
+        to send; for direct messages chats only. If the message is sent as a reply \
+        to another suggested post, then that suggested post is automatically declined. \
+
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inline \
@@ -437,6 +473,7 @@ class APIMethods[HTTPClient: ABCClient]:
         from_chat_id: int | str,
         message_ids: list[int],
         message_thread_id: int | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         protect_content: bool | None = None,
         remove_caption: bool | None = None,
@@ -458,6 +495,9 @@ class APIMethods[HTTPClient: ABCClient]:
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
         forum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the messages will be sent; \
+        required if the messages are sent to a direct messages chat.
 
         :param from_chat_id: Unique identifier for the chat where the original messages were sent (or \
         channel username in the format @channelusername).
@@ -486,6 +526,7 @@ class APIMethods[HTTPClient: ABCClient]:
         photo: InputFile | str,
         business_connection_id: str | None = None,
         message_thread_id: int | None = None,
+        direct_messages_topic_id: int | None = None,
         caption: str | None = None,
         parse_mode: str | None = default_params["parse_mode"],
         caption_entities: list[MessageEntity] | None = None,
@@ -495,6 +536,7 @@ class APIMethods[HTTPClient: ABCClient]:
         protect_content: bool | None = None,
         allow_paid_broadcast: bool | None = None,
         message_effect_id: str | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         reply_parameters: ReplyParameters | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         **other: typing.Any,
@@ -511,6 +553,9 @@ class APIMethods[HTTPClient: ABCClient]:
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
         forum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
+        required if the message is sent to a direct messages chat.
 
         :param photo: Photo to send. Pass a file_id as String to send a photo that exists on the Telegram \
         servers (recommended), pass an HTTP URL as a String for Telegram to get a \
@@ -543,6 +588,10 @@ class APIMethods[HTTPClient: ABCClient]:
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for private \
         chats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested post \
+        to send; for direct messages chats only. If the message is sent as a reply \
+        to another suggested post, then that suggested post is automatically declined. \
+
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inline \
@@ -563,6 +612,7 @@ class APIMethods[HTTPClient: ABCClient]:
         audio: InputFile | str,
         business_connection_id: str | None = None,
         message_thread_id: int | None = None,
+        direct_messages_topic_id: int | None = None,
         caption: str | None = None,
         parse_mode: str | None = default_params["parse_mode"],
         caption_entities: list[MessageEntity] | None = None,
@@ -574,6 +624,7 @@ class APIMethods[HTTPClient: ABCClient]:
         protect_content: bool | None = None,
         allow_paid_broadcast: bool | None = None,
         message_effect_id: str | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         reply_parameters: ReplyParameters | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         **other: typing.Any,
@@ -594,6 +645,9 @@ class APIMethods[HTTPClient: ABCClient]:
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
         forum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
+        required if the message is sent to a direct messages chat.
 
         :param audio: Audio file to send. Pass a file_id as String to send an audio file that exists \
         on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram \
@@ -633,6 +687,10 @@ class APIMethods[HTTPClient: ABCClient]:
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for private \
         chats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested post \
+        to send; for direct messages chats only. If the message is sent as a reply \
+        to another suggested post, then that suggested post is automatically declined. \
+
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inline \
@@ -653,6 +711,7 @@ class APIMethods[HTTPClient: ABCClient]:
         document: InputFile | str,
         business_connection_id: str | None = None,
         message_thread_id: int | None = None,
+        direct_messages_topic_id: int | None = None,
         thumbnail: InputFile | str | None = None,
         caption: str | None = None,
         parse_mode: str | None = default_params["parse_mode"],
@@ -662,6 +721,7 @@ class APIMethods[HTTPClient: ABCClient]:
         protect_content: bool | None = None,
         allow_paid_broadcast: bool | None = None,
         message_effect_id: str | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         reply_parameters: ReplyParameters | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         **other: typing.Any,
@@ -680,6 +740,9 @@ class APIMethods[HTTPClient: ABCClient]:
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
         forum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
+        required if the message is sent to a direct messages chat.
 
         :param document: File to send. Pass a file_id as String to send a file that exists on the Telegram \
         servers (recommended), pass an HTTP URL as a String for Telegram to get a \
@@ -717,6 +780,10 @@ class APIMethods[HTTPClient: ABCClient]:
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for private \
         chats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested post \
+        to send; for direct messages chats only. If the message is sent as a reply \
+        to another suggested post, then that suggested post is automatically declined. \
+
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inline \
@@ -737,10 +804,13 @@ class APIMethods[HTTPClient: ABCClient]:
         video: InputFile | str,
         business_connection_id: str | None = None,
         message_thread_id: int | None = None,
+        direct_messages_topic_id: int | None = None,
         duration: int | None = None,
         width: int | None = None,
         height: int | None = None,
         thumbnail: InputFile | str | None = None,
+        cover: InputFile | str | None = None,
+        start_timestamp: int | None = None,
         caption: str | None = None,
         parse_mode: str | None = default_params["parse_mode"],
         caption_entities: list[MessageEntity] | None = None,
@@ -751,6 +821,7 @@ class APIMethods[HTTPClient: ABCClient]:
         protect_content: bool | None = None,
         allow_paid_broadcast: bool | None = None,
         message_effect_id: str | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         reply_parameters: ReplyParameters | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         **other: typing.Any,
@@ -771,6 +842,9 @@ class APIMethods[HTTPClient: ABCClient]:
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
         forum supergroups only.
 
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
+        required if the message is sent to a direct messages chat.
+
         :param video: Video to send. Pass a file_id as String to send a video that exists on the Telegram \
         servers (recommended), pass an HTTP URL as a String for Telegram to get a \
         video from the Internet, or upload a new video using multipart/form-data. \
@@ -789,6 +863,14 @@ class APIMethods[HTTPClient: ABCClient]:
         can't be reused and can be only uploaded as a new file, so you can pass `attach://<file_attach_name>` \
         if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. \
         More information on Sending Files: https://core.telegram.org/bots/api#sending-files. \
+
+        :param cover: Cover for the video in the message. Pass a file_id to send a file that exists \
+        on the Telegram servers (recommended), pass an HTTP URL for Telegram to \
+        get a file from the Internet, or pass `attach://<file_attach_name>` to \
+        upload a new one using multipart/form-data under <file_attach_name> \
+        name. More information on Sending Files: https://core.telegram.org/bots/api#sending-files. \
+
+        :param start_timestamp: Start timestamp for the video in the message.
 
         :param caption: Video caption (may also be used when resending videos by file_id), 0-1024 \
         characters after entities parsing.
@@ -816,6 +898,10 @@ class APIMethods[HTTPClient: ABCClient]:
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for private \
         chats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested post \
+        to send; for direct messages chats only. If the message is sent as a reply \
+        to another suggested post, then that suggested post is automatically declined. \
+
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inline \
@@ -836,6 +922,7 @@ class APIMethods[HTTPClient: ABCClient]:
         animation: InputFile | str,
         business_connection_id: str | None = None,
         message_thread_id: int | None = None,
+        direct_messages_topic_id: int | None = None,
         duration: int | None = None,
         width: int | None = None,
         height: int | None = None,
@@ -849,6 +936,7 @@ class APIMethods[HTTPClient: ABCClient]:
         protect_content: bool | None = None,
         allow_paid_broadcast: bool | None = None,
         message_effect_id: str | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         reply_parameters: ReplyParameters | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         **other: typing.Any,
@@ -867,6 +955,9 @@ class APIMethods[HTTPClient: ABCClient]:
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
         forum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
+        required if the message is sent to a direct messages chat.
 
         :param animation: Animation to send. Pass a file_id as String to send an animation that exists \
         on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram \
@@ -911,6 +1002,10 @@ class APIMethods[HTTPClient: ABCClient]:
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for private \
         chats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested post \
+        to send; for direct messages chats only. If the message is sent as a reply \
+        to another suggested post, then that suggested post is automatically declined. \
+
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inline \
@@ -931,6 +1026,7 @@ class APIMethods[HTTPClient: ABCClient]:
         voice: InputFile | str,
         business_connection_id: str | None = None,
         message_thread_id: int | None = None,
+        direct_messages_topic_id: int | None = None,
         caption: str | None = None,
         parse_mode: str | None = default_params["parse_mode"],
         caption_entities: list[MessageEntity] | None = None,
@@ -939,6 +1035,7 @@ class APIMethods[HTTPClient: ABCClient]:
         protect_content: bool | None = None,
         allow_paid_broadcast: bool | None = None,
         message_effect_id: str | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         reply_parameters: ReplyParameters | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         **other: typing.Any,
@@ -960,6 +1057,9 @@ class APIMethods[HTTPClient: ABCClient]:
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
         forum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
+        required if the message is sent to a direct messages chat.
 
         :param voice: Audio file to send. Pass a file_id as String to send a file that exists on the \
         Telegram servers (recommended), pass an HTTP URL as a String for Telegram \
@@ -987,6 +1087,10 @@ class APIMethods[HTTPClient: ABCClient]:
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for private \
         chats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested post \
+        to send; for direct messages chats only. If the message is sent as a reply \
+        to another suggested post, then that suggested post is automatically declined. \
+
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inline \
@@ -1007,6 +1111,7 @@ class APIMethods[HTTPClient: ABCClient]:
         video_note: InputFile | str,
         business_connection_id: str | None = None,
         message_thread_id: int | None = None,
+        direct_messages_topic_id: int | None = None,
         duration: int | None = None,
         length: int | None = None,
         thumbnail: InputFile | str | None = None,
@@ -1014,6 +1119,7 @@ class APIMethods[HTTPClient: ABCClient]:
         protect_content: bool | None = None,
         allow_paid_broadcast: bool | None = None,
         message_effect_id: str | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         reply_parameters: ReplyParameters | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         **other: typing.Any,
@@ -1032,6 +1138,9 @@ class APIMethods[HTTPClient: ABCClient]:
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
         forum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
+        required if the message is sent to a direct messages chat.
 
         :param video_note: Video note to send. Pass a file_id as String to send a video note that exists \
         on the Telegram servers (recommended) or upload a new video using multipart/form-data. \
@@ -1061,6 +1170,10 @@ class APIMethods[HTTPClient: ABCClient]:
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for private \
         chats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested post \
+        to send; for direct messages chats only. If the message is sent as a reply \
+        to another suggested post, then that suggested post is automatically declined. \
+
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inline \
@@ -1081,6 +1194,8 @@ class APIMethods[HTTPClient: ABCClient]:
         star_count: int,
         media: list[InputPaidMedia],
         business_connection_id: str | None = None,
+        message_thread_id: int | None = None,
+        direct_messages_topic_id: int | None = None,
         payload: str | None = None,
         caption: str | None = None,
         parse_mode: str | None = default_params["parse_mode"],
@@ -1089,6 +1204,7 @@ class APIMethods[HTTPClient: ABCClient]:
         disable_notification: bool | None = None,
         protect_content: bool | None = None,
         allow_paid_broadcast: bool | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         reply_parameters: ReplyParameters | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         **other: typing.Any,
@@ -1105,8 +1221,14 @@ class APIMethods[HTTPClient: ABCClient]:
         Star proceeds from this media will be credited to the chat's balance. Otherwise, \
         they will be credited to the bot's balance.
 
+        :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
+        forum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
+        required if the message is sent to a direct messages chat.
+
         :param star_count: The number of Telegram Stars that must be paid to buy access to the media; \
-        1-2500.
+        1-10000.
 
         :param media: A JSON-serialized array describing the media to be sent; up to 10 items. \
 
@@ -1131,6 +1253,10 @@ class APIMethods[HTTPClient: ABCClient]:
         limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will \
         be withdrawn from the bot's balance.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested post \
+        to send; for direct messages chats only. If the message is sent as a reply \
+        to another suggested post, then that suggested post is automatically declined. \
+
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inline \
@@ -1151,6 +1277,7 @@ class APIMethods[HTTPClient: ABCClient]:
         media: list[InputMediaAudio | InputMediaDocument | InputMediaPhoto | InputMediaVideo],
         business_connection_id: str | None = None,
         message_thread_id: int | None = None,
+        direct_messages_topic_id: int | None = None,
         disable_notification: bool | None = None,
         protect_content: bool | None = None,
         allow_paid_broadcast: bool | None = None,
@@ -1162,7 +1289,8 @@ class APIMethods[HTTPClient: ABCClient]:
 
         Use this method to send a group of photos, videos, documents or audios as
         an album. Documents and audio files can be only grouped in an album with messages
-        of the same type. On success, an array of Messages that were sent is returned.
+        of the same type. On success, an array of Message objects that were sent is
+        returned.
 
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be sent.
@@ -1172,6 +1300,9 @@ class APIMethods[HTTPClient: ABCClient]:
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
         forum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the messages will be sent; \
+        required if the messages are sent to a direct messages chat.
 
         :param media: A JSON-serialized array describing messages to be sent, must include 2-10 \
         items.
@@ -1204,6 +1335,7 @@ class APIMethods[HTTPClient: ABCClient]:
         longitude: float,
         business_connection_id: str | None = None,
         message_thread_id: int | None = None,
+        direct_messages_topic_id: int | None = None,
         horizontal_accuracy: float | None = None,
         live_period: int | None = None,
         heading: int | None = None,
@@ -1212,6 +1344,7 @@ class APIMethods[HTTPClient: ABCClient]:
         protect_content: bool | None = None,
         allow_paid_broadcast: bool | None = None,
         message_effect_id: str | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         reply_parameters: ReplyParameters | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         **other: typing.Any,
@@ -1228,6 +1361,9 @@ class APIMethods[HTTPClient: ABCClient]:
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
         forum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
+        required if the message is sent to a direct messages chat.
 
         :param latitude: Latitude of the location.
 
@@ -1256,6 +1392,10 @@ class APIMethods[HTTPClient: ABCClient]:
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for private \
         chats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested post \
+        to send; for direct messages chats only. If the message is sent as a reply \
+        to another suggested post, then that suggested post is automatically declined. \
+
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inline \
@@ -1279,6 +1419,7 @@ class APIMethods[HTTPClient: ABCClient]:
         address: str,
         business_connection_id: str | None = None,
         message_thread_id: int | None = None,
+        direct_messages_topic_id: int | None = None,
         foursquare_id: str | None = None,
         foursquare_type: str | None = None,
         google_place_id: str | None = None,
@@ -1287,6 +1428,7 @@ class APIMethods[HTTPClient: ABCClient]:
         protect_content: bool | None = None,
         allow_paid_broadcast: bool | None = None,
         message_effect_id: str | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         reply_parameters: ReplyParameters | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         **other: typing.Any,
@@ -1304,6 +1446,9 @@ class APIMethods[HTTPClient: ABCClient]:
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
         forum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
+        required if the message is sent to a direct messages chat.
 
         :param latitude: Latitude of the venue.
 
@@ -1333,6 +1478,10 @@ class APIMethods[HTTPClient: ABCClient]:
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for private \
         chats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested post \
+        to send; for direct messages chats only. If the message is sent as a reply \
+        to another suggested post, then that suggested post is automatically declined. \
+
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: Additional interface options. A JSON-serialized object for an inline \
@@ -1354,12 +1503,14 @@ class APIMethods[HTTPClient: ABCClient]:
         first_name: str,
         business_connection_id: str | None = None,
         message_thread_id: int | None = None,
+        direct_messages_topic_id: int | None = None,
         last_name: str | None = None,
         vcard: str | None = None,
         disable_notification: bool | None = None,
         protect_content: bool | None = None,
         allow_paid_broadcast: bool | None = None,
         message_effect_id: str | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         reply_parameters: ReplyParameters | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         **other: typing.Any,
@@ -1376,6 +1527,9 @@ class APIMethods[HTTPClient: ABCClient]:
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
         forum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
+        required if the message is sent to a direct messages chat.
 
         :param phone_number: Contact's phone number.
 
@@ -1395,6 +1549,10 @@ class APIMethods[HTTPClient: ABCClient]:
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for private \
         chats only.
+
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested post \
+        to send; for direct messages chats only. If the message is sent as a reply \
+        to another suggested post, then that suggested post is automatically declined. \
 
         :param reply_parameters: Description of the message to reply to.
 
@@ -1445,7 +1603,8 @@ class APIMethods[HTTPClient: ABCClient]:
         will be sent.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        (in the format @channelusername). Polls can't be sent to channel direct \
+        messages chats.
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
         forum supergroups only.
@@ -1458,7 +1617,7 @@ class APIMethods[HTTPClient: ABCClient]:
         :param question_entities: A JSON-serialized list of special entities that appear in the poll question. \
         It can be specified instead of question_parse_mode.
 
-        :param options: A JSON-serialized list of 2-10 answer options.
+        :param options: A JSON-serialized list of 2-12 answer options.
 
         :param is_anonymous: True, if the poll needs to be anonymous, defaults to True.
 
@@ -1514,17 +1673,61 @@ class APIMethods[HTTPClient: ABCClient]:
         )
         return full_result(method_response, Message)
 
+    async def send_checklist(
+        self,
+        *,
+        business_connection_id: str,
+        chat_id: int,
+        checklist: InputChecklist,
+        disable_notification: bool | None = None,
+        protect_content: bool | None = None,
+        message_effect_id: str | None = None,
+        reply_parameters: ReplyParameters | None = None,
+        reply_markup: InlineKeyboardMarkup | None = None,
+        **other: typing.Any,
+    ) -> Result[Message, APIError]:
+        """Method `sendChecklist`, see the [documentation](https://core.telegram.org/bots/api#sendchecklist)
+
+        Use this method to send a checklist on behalf of a connected business account.
+        On success, the sent Message is returned.
+
+        :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
+        will be sent.
+
+        :param chat_id: Unique identifier for the target chat.
+
+        :param checklist: A JSON-serialized object for the checklist to send.
+
+        :param disable_notification: Sends the message silently. Users will receive a notification with no sound. \
+
+        :param protect_content: Protects the contents of the sent message from forwarding and saving.
+
+        :param message_effect_id: Unique identifier of the message effect to be added to the message.
+
+        :param reply_parameters: A JSON-serialized object for description of the message to reply to.
+
+        :param reply_markup: A JSON-serialized object for an inline keyboard.
+        """
+
+        method_response = await self.api.request_raw(
+            "sendChecklist",
+            get_params(locals()),
+        )
+        return full_result(method_response, Message)
+
     async def send_dice(
         self,
         *,
         chat_id: int | str,
         business_connection_id: str | None = None,
         message_thread_id: int | None = None,
+        direct_messages_topic_id: int | None = None,
         emoji: DiceEmoji | None = None,
         disable_notification: bool | None = None,
         protect_content: bool | None = None,
         allow_paid_broadcast: bool | None = None,
         message_effect_id: str | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         reply_parameters: ReplyParameters | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         **other: typing.Any,
@@ -1543,6 +1746,9 @@ class APIMethods[HTTPClient: ABCClient]:
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
         forum supergroups only.
 
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
+        required if the message is sent to a direct messages chat.
+
         :param emoji: Emoji on which the dice throw animation is based. Currently, must be one \
         of `🎲`, `🎯`, `🏀`, `⚽`, `🎳`, or `🎰`. Dice can have values 1-6 for `🎲`, `🎯` and \
         `🎳`, values 1-5 for `🏀` and `⚽`, and values 1-64 for `🎰`. Defaults to `🎲`. \
@@ -1557,6 +1763,10 @@ class APIMethods[HTTPClient: ABCClient]:
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for private \
         chats only.
+
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested post \
+        to send; for direct messages chats only. If the message is sent as a reply \
+        to another suggested post, then that suggested post is automatically declined. \
 
         :param reply_parameters: Description of the message to reply to.
 
@@ -1591,8 +1801,9 @@ class APIMethods[HTTPClient: ABCClient]:
         :param business_connection_id: Unique identifier of the business connection on behalf of which the action \
         will be sent.
 
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
+        :param chat_id: Unique identifier for the target chat or username of the target supergroup \
+        (in the format @supergroupusername). Channel chats and channel direct \
+        messages chats aren't supported.
 
         :param message_thread_id: Unique identifier for the target message thread; for supergroups only. \
 
@@ -1622,9 +1833,9 @@ class APIMethods[HTTPClient: ABCClient]:
         """Method `setMessageReaction`, see the [documentation](https://core.telegram.org/bots/api#setmessagereaction)
 
         Use this method to change the chosen reactions on a message. Service messages
-        can't be reacted to. Automatically forwarded messages from a channel to
-        its discussion group have the same available reactions as messages in the
-        channel. Bots can't use paid reactions. Returns True on success.
+        of some types can't be reacted to. Automatically forwarded messages from
+        a channel to its discussion group have the same available reactions as messages
+        in the channel. Bots can't use paid reactions. Returns True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel \
         (in the format @channelusername).
@@ -1859,6 +2070,7 @@ class APIMethods[HTTPClient: ABCClient]:
         can_edit_messages: bool | None = None,
         can_pin_messages: bool | None = None,
         can_manage_topics: bool | None = None,
+        can_manage_direct_messages: bool | None = None,
         **other: typing.Any,
     ) -> Result[bool, APIError]:
         """Method `promoteChatMember`, see the [documentation](https://core.telegram.org/bots/api#promotechatmember)
@@ -1876,8 +2088,9 @@ class APIMethods[HTTPClient: ABCClient]:
         :param is_anonymous: Pass True if the administrator's presence in the chat is hidden.
 
         :param can_manage_chat: Pass True if the administrator can access the chat event log, get boost list, \
-        see hidden supergroup and channel members, report spam messages and ignore \
-        slow mode. Implied by any other administrator privilege.
+        see hidden supergroup and channel members, report spam messages, ignore \
+        slow mode, and send messages to the chat without paying Telegram Stars. \
+        Implied by any other administrator privilege.
 
         :param can_delete_messages: Pass True if the administrator can delete messages of other users.
 
@@ -1902,8 +2115,8 @@ class APIMethods[HTTPClient: ABCClient]:
 
         :param can_delete_stories: Pass True if the administrator can delete stories posted by other users. \
 
-        :param can_post_messages: Pass True if the administrator can post messages in the channel, or access \
-        channel statistics; for channels only.
+        :param can_post_messages: Pass True if the administrator can post messages in the channel, approve \
+        suggested posts, or access channel statistics; for channels only.
 
         :param can_edit_messages: Pass True if the administrator can edit messages of other users and can pin \
         messages; for channels only.
@@ -1912,6 +2125,9 @@ class APIMethods[HTTPClient: ABCClient]:
 
         :param can_manage_topics: Pass True if the user is allowed to create, rename, close, and reopen forum \
         topics; for supergroups only.
+
+        :param can_manage_direct_messages: Pass True if the administrator can manage direct messages within the channel \
+        and decline suggested posts; for channels only.
         """
 
         method_response = await self.api.request_raw(
@@ -2159,7 +2375,7 @@ class APIMethods[HTTPClient: ABCClient]:
         payment. Currently, it must always be 2592000 (30 days).
 
         :param subscription_price: The amount of Telegram Stars a user must pay initially and after each subsequent \
-        subscription period to be a member of the chat; 1-2500.
+        subscription period to be a member of the chat; 1-10000.
         """
 
         method_response = await self.api.request_raw(
@@ -2382,11 +2598,11 @@ class APIMethods[HTTPClient: ABCClient]:
     ) -> Result[bool, APIError]:
         """Method `pinChatMessage`, see the [documentation](https://core.telegram.org/bots/api#pinchatmessage)
 
-        Use this method to add a message to the list of pinned messages in a chat. If
-        the chat is not a private chat, the bot must be an administrator in the chat
-        for this to work and must have the 'can_pin_messages' administrator right
-        in a supergroup or 'can_edit_messages' administrator right in a channel.
-        Returns True on success.
+        Use this method to add a message to the list of pinned messages in a chat. In
+        private chats and channel direct messages chats, all non-service messages
+        can be pinned. Conversely, the bot must be an administrator with the 'can_pin_messages'
+        right or the 'can_edit_messages' right to pin messages in groups and channels
+        respectively. Returns True on success.
 
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be pinned.
@@ -2418,10 +2634,10 @@ class APIMethods[HTTPClient: ABCClient]:
         """Method `unpinChatMessage`, see the [documentation](https://core.telegram.org/bots/api#unpinchatmessage)
 
         Use this method to remove a message from the list of pinned messages in a chat.
-        If the chat is not a private chat, the bot must be an administrator in the chat
-        for this to work and must have the 'can_pin_messages' administrator right
-        in a supergroup or 'can_edit_messages' administrator right in a channel.
-        Returns True on success.
+        In private chats and channel direct messages chats, all messages can be
+        unpinned. Conversely, the bot must be an administrator with the 'can_pin_messages'
+        right or the 'can_edit_messages' right to unpin messages in groups and
+        channels respectively. Returns True on success.
 
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be unpinned.
@@ -2448,11 +2664,12 @@ class APIMethods[HTTPClient: ABCClient]:
     ) -> Result[bool, APIError]:
         """Method `unpinAllChatMessages`, see the [documentation](https://core.telegram.org/bots/api#unpinallchatmessages)
 
-        Use this method to clear the list of pinned messages in a chat. If the chat
-        is not a private chat, the bot must be an administrator in the chat for this
-        to work and must have the 'can_pin_messages' administrator right in a supergroup
-        or 'can_edit_messages' administrator right in a channel. Returns True
-        on success.
+        Use this method to clear the list of pinned messages in a chat. In private
+        chats and channel direct messages chats, no additional rights are required
+        to unpin all pinned messages. Conversely, the bot must be an administrator
+        with the 'can_pin_messages' right or the 'can_edit_messages' right to
+        unpin all pinned messages in groups and channels respectively. Returns
+        True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel \
         (in the format @channelusername).
@@ -2476,7 +2693,8 @@ class APIMethods[HTTPClient: ABCClient]:
         True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target supergroup \
-        or channel (in the format @channelusername).
+        or channel (in the format @channelusername). Channel direct messages \
+        chats aren't supported; leave the corresponding channel instead.
         """
 
         method_response = await self.api.request_raw(
@@ -3389,6 +3607,706 @@ class APIMethods[HTTPClient: ABCClient]:
         )
         return full_result(method_response, ChatAdministratorRights)
 
+    async def get_available_gifts(self, **other: typing.Any) -> Result[Gifts, APIError]:
+        """Method `getAvailableGifts`, see the [documentation](https://core.telegram.org/bots/api#getavailablegifts)
+
+        Returns the list of gifts that can be sent by the bot to users and channel chats.
+        Requires no parameters. Returns a Gifts object.
+        """
+
+        method_response = await self.api.request_raw(
+            "getAvailableGifts",
+            get_params(locals()),
+        )
+        return full_result(method_response, Gifts)
+
+    async def send_gift(
+        self,
+        *,
+        gift_id: str,
+        user_id: int | None = None,
+        chat_id: int | str | None = None,
+        pay_for_upgrade: bool | None = None,
+        text: str | None = None,
+        text_parse_mode: str | None = None,
+        text_entities: list[MessageEntity] | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `sendGift`, see the [documentation](https://core.telegram.org/bots/api#sendgift)
+
+        Sends a gift to the given user or channel chat. The gift can't be converted
+        to Telegram Stars by the receiver. Returns True on success.
+
+        :param user_id: Required if chat_id is not specified. Unique identifier of the target user \
+        who will receive the gift.
+
+        :param chat_id: Required if user_id is not specified. Unique identifier for the chat or \
+        username of the channel (in the format @channelusername) that will receive \
+        the gift.
+
+        :param gift_id: Identifier of the gift.
+
+        :param pay_for_upgrade: Pass True to pay for the gift upgrade from the bot's balance, thereby making \
+        the upgrade free for the receiver.
+
+        :param text: Text that will be shown along with the gift; 0-128 characters.
+
+        :param text_parse_mode: Mode for parsing entities in the text. See formatting options for more details. \
+        Entities other than `bold`, `italic`, `underline`, `strikethrough`, \
+        `spoiler`, and `custom_emoji` are ignored.
+
+        :param text_entities: A JSON-serialized list of special entities that appear in the gift text. \
+        It can be specified instead of text_parse_mode. Entities other than `bold`, \
+        `italic`, `underline`, `strikethrough`, `spoiler`, and `custom_emoji` \
+        are ignored.
+        """
+
+        method_response = await self.api.request_raw(
+            "sendGift",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def gift_premium_subscription(
+        self,
+        *,
+        user_id: int,
+        month_count: int,
+        star_count: int,
+        text: str | None = None,
+        text_parse_mode: str | None = None,
+        text_entities: list[MessageEntity] | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `giftPremiumSubscription`, see the [documentation](https://core.telegram.org/bots/api#giftpremiumsubscription)
+
+        Gifts a Telegram Premium subscription to the given user. Returns True on
+        success.
+
+        :param user_id: Unique identifier of the target user who will receive a Telegram Premium \
+        subscription.
+
+        :param month_count: Number of months the Telegram Premium subscription will be active for the \
+        user; must be one of 3, 6, or 12.
+
+        :param star_count: Number of Telegram Stars to pay for the Telegram Premium subscription; \
+        must be 1000 for 3 months, 1500 for 6 months, and 2500 for 12 months.
+
+        :param text: Text that will be shown along with the service message about the subscription; \
+        0-128 characters.
+
+        :param text_parse_mode: Mode for parsing entities in the text. See formatting options for more details. \
+        Entities other than `bold`, `italic`, `underline`, `strikethrough`, \
+        `spoiler`, and `custom_emoji` are ignored.
+
+        :param text_entities: A JSON-serialized list of special entities that appear in the gift text. \
+        It can be specified instead of text_parse_mode. Entities other than `bold`, \
+        `italic`, `underline`, `strikethrough`, `spoiler`, and `custom_emoji` \
+        are ignored.
+        """
+
+        method_response = await self.api.request_raw(
+            "giftPremiumSubscription",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def verify_user(
+        self,
+        *,
+        user_id: int,
+        custom_description: str | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `verifyUser`, see the [documentation](https://core.telegram.org/bots/api#verifyuser)
+
+        Verifies a user on behalf of the organization which is represented by the
+        bot. Returns True on success.
+
+        :param user_id: Unique identifier of the target user.
+
+        :param custom_description: Custom description for the verification; 0-70 characters. Must be empty \
+        if the organization isn't allowed to provide a custom verification description. \
+        """
+
+        method_response = await self.api.request_raw(
+            "verifyUser",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def verify_chat(
+        self,
+        *,
+        chat_id: int | str,
+        custom_description: str | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `verifyChat`, see the [documentation](https://core.telegram.org/bots/api#verifychat)
+
+        Verifies a chat on behalf of the organization which is represented by the
+        bot. Returns True on success.
+
+        :param chat_id: Unique identifier for the target chat or username of the target channel \
+        (in the format @channelusername). Channel direct messages chats can't \
+        be verified.
+
+        :param custom_description: Custom description for the verification; 0-70 characters. Must be empty \
+        if the organization isn't allowed to provide a custom verification description. \
+        """
+
+        method_response = await self.api.request_raw(
+            "verifyChat",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def remove_user_verification(
+        self,
+        *,
+        user_id: int,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `removeUserVerification`, see the [documentation](https://core.telegram.org/bots/api#removeuserverification)
+
+        Removes verification from a user who is currently verified on behalf of
+        the organization represented by the bot. Returns True on success.
+
+        :param user_id: Unique identifier of the target user.
+        """
+
+        method_response = await self.api.request_raw(
+            "removeUserVerification",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def remove_chat_verification(
+        self,
+        *,
+        chat_id: int | str,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `removeChatVerification`, see the [documentation](https://core.telegram.org/bots/api#removechatverification)
+
+        Removes verification from a chat that is currently verified on behalf of
+        the organization represented by the bot. Returns True on success.
+
+        :param chat_id: Unique identifier for the target chat or username of the target channel \
+        (in the format @channelusername).
+        """
+
+        method_response = await self.api.request_raw(
+            "removeChatVerification",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def read_business_message(
+        self,
+        *,
+        business_connection_id: str,
+        chat_id: int,
+        message_id: int,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `readBusinessMessage`, see the [documentation](https://core.telegram.org/bots/api#readbusinessmessage)
+
+        Marks incoming message as read on behalf of a business account. Requires
+        the can_read_messages business bot right. Returns True on success.
+
+        :param business_connection_id: Unique identifier of the business connection on behalf of which to read \
+        the message.
+
+        :param chat_id: Unique identifier of the chat in which the message was received. The chat \
+        must have been active in the last 24 hours.
+
+        :param message_id: Unique identifier of the message to mark as read.
+        """
+
+        method_response = await self.api.request_raw(
+            "readBusinessMessage",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def delete_business_messages(
+        self,
+        *,
+        business_connection_id: str,
+        message_ids: list[int],
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `deleteBusinessMessages`, see the [documentation](https://core.telegram.org/bots/api#deletebusinessmessages)
+
+        Delete messages on behalf of a business account. Requires the can_delete_sent_messages
+        business bot right to delete messages sent by the bot itself, or the can_delete_all_messages
+        business bot right to delete any message. Returns True on success.
+
+        :param business_connection_id: Unique identifier of the business connection on behalf of which to delete \
+        the messages.
+
+        :param message_ids: A JSON-serialized list of 1-100 identifiers of messages to delete. All \
+        messages must be from the same chat. See deleteMessage for limitations \
+        on which messages can be deleted.
+        """
+
+        method_response = await self.api.request_raw(
+            "deleteBusinessMessages",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def set_business_account_name(
+        self,
+        *,
+        business_connection_id: str,
+        first_name: str,
+        last_name: str | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `setBusinessAccountName`, see the [documentation](https://core.telegram.org/bots/api#setbusinessaccountname)
+
+        Changes the first and last name of a managed business account. Requires
+        the can_change_name business bot right. Returns True on success.
+
+        :param business_connection_id: Unique identifier of the business connection.
+
+        :param first_name: The new value of the first name for the business account; 1-64 characters. \
+
+        :param last_name: The new value of the last name for the business account; 0-64 characters. \
+        """
+
+        method_response = await self.api.request_raw(
+            "setBusinessAccountName",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def set_business_account_username(
+        self,
+        *,
+        business_connection_id: str,
+        username: str | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `setBusinessAccountUsername`, see the [documentation](https://core.telegram.org/bots/api#setbusinessaccountusername)
+
+        Changes the username of a managed business account. Requires the can_change_username
+        business bot right. Returns True on success.
+
+        :param business_connection_id: Unique identifier of the business connection.
+
+        :param username: The new value of the username for the business account; 0-32 characters. \
+        """
+
+        method_response = await self.api.request_raw(
+            "setBusinessAccountUsername",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def set_business_account_bio(
+        self,
+        *,
+        business_connection_id: str,
+        bio: str | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `setBusinessAccountBio`, see the [documentation](https://core.telegram.org/bots/api#setbusinessaccountbio)
+
+        Changes the bio of a managed business account. Requires the can_change_bio
+        business bot right. Returns True on success.
+
+        :param business_connection_id: Unique identifier of the business connection.
+
+        :param bio: The new value of the bio for the business account; 0-140 characters.
+        """
+
+        method_response = await self.api.request_raw(
+            "setBusinessAccountBio",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def set_business_account_profile_photo(
+        self,
+        *,
+        business_connection_id: str,
+        photo: InputProfilePhoto,
+        is_public: bool | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `setBusinessAccountProfilePhoto`, see the [documentation](https://core.telegram.org/bots/api#setbusinessaccountprofilephoto)
+
+        Changes the profile photo of a managed business account. Requires the can_edit_profile_photo
+        business bot right. Returns True on success.
+
+        :param business_connection_id: Unique identifier of the business connection.
+
+        :param photo: The new profile photo to set.
+
+        :param is_public: Pass True to set the public photo, which will be visible even if the main photo \
+        is hidden by the business account's privacy settings. An account can have \
+        only one public photo.
+        """
+
+        method_response = await self.api.request_raw(
+            "setBusinessAccountProfilePhoto",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def remove_business_account_profile_photo(
+        self,
+        *,
+        business_connection_id: str,
+        is_public: bool | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `removeBusinessAccountProfilePhoto`, see the [documentation](https://core.telegram.org/bots/api#removebusinessaccountprofilephoto)
+
+        Removes the current profile photo of a managed business account. Requires
+        the can_edit_profile_photo business bot right. Returns True on success.
+
+        :param business_connection_id: Unique identifier of the business connection.
+
+        :param is_public: Pass True to remove the public photo, which is visible even if the main photo \
+        is hidden by the business account's privacy settings. After the main photo \
+        is removed, the previous profile photo (if present) becomes the main photo. \
+        """
+
+        method_response = await self.api.request_raw(
+            "removeBusinessAccountProfilePhoto",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def set_business_account_gift_settings(
+        self,
+        *,
+        business_connection_id: str,
+        show_gift_button: bool,
+        accepted_gift_types: AcceptedGiftTypes,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `setBusinessAccountGiftSettings`, see the [documentation](https://core.telegram.org/bots/api#setbusinessaccountgiftsettings)
+
+        Changes the privacy settings pertaining to incoming gifts in a managed
+        business account. Requires the can_change_gift_settings business bot
+        right. Returns True on success.
+
+        :param business_connection_id: Unique identifier of the business connection.
+
+        :param show_gift_button: Pass True, if a button for sending a gift to the user or by the business account \
+        must always be shown in the input field.
+
+        :param accepted_gift_types: Types of gifts accepted by the business account.
+        """
+
+        method_response = await self.api.request_raw(
+            "setBusinessAccountGiftSettings",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def get_business_account_star_balance(
+        self,
+        *,
+        business_connection_id: str,
+        **other: typing.Any,
+    ) -> Result[StarAmount, APIError]:
+        """Method `getBusinessAccountStarBalance`, see the [documentation](https://core.telegram.org/bots/api#getbusinessaccountstarbalance)
+
+        Returns the amount of Telegram Stars owned by a managed business account.
+        Requires the can_view_gifts_and_stars business bot right. Returns StarAmount
+        on success.
+
+        :param business_connection_id: Unique identifier of the business connection.
+        """
+
+        method_response = await self.api.request_raw(
+            "getBusinessAccountStarBalance",
+            get_params(locals()),
+        )
+        return full_result(method_response, StarAmount)
+
+    async def transfer_business_account_stars(
+        self,
+        *,
+        business_connection_id: str,
+        star_count: int,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `transferBusinessAccountStars`, see the [documentation](https://core.telegram.org/bots/api#transferbusinessaccountstars)
+
+        Transfers Telegram Stars from the business account balance to the bot's
+        balance. Requires the can_transfer_stars business bot right. Returns
+        True on success.
+
+        :param business_connection_id: Unique identifier of the business connection.
+
+        :param star_count: Number of Telegram Stars to transfer; 1-10000.
+        """
+
+        method_response = await self.api.request_raw(
+            "transferBusinessAccountStars",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def get_business_account_gifts(
+        self,
+        *,
+        business_connection_id: str,
+        exclude_unsaved: bool | None = None,
+        exclude_saved: bool | None = None,
+        exclude_unlimited: bool | None = None,
+        exclude_limited: bool | None = None,
+        exclude_unique: bool | None = None,
+        sort_by_price: bool | None = None,
+        offset: str | None = None,
+        limit: int | None = None,
+        **other: typing.Any,
+    ) -> Result[OwnedGifts, APIError]:
+        """Method `getBusinessAccountGifts`, see the [documentation](https://core.telegram.org/bots/api#getbusinessaccountgifts)
+
+        Returns the gifts received and owned by a managed business account. Requires
+        the can_view_gifts_and_stars business bot right. Returns OwnedGifts
+        on success.
+
+        :param business_connection_id: Unique identifier of the business connection.
+
+        :param exclude_unsaved: Pass True to exclude gifts that aren't saved to the account's profile page. \
+
+        :param exclude_saved: Pass True to exclude gifts that are saved to the account's profile page. \
+
+        :param exclude_unlimited: Pass True to exclude gifts that can be purchased an unlimited number of times. \
+
+        :param exclude_limited: Pass True to exclude gifts that can be purchased a limited number of times. \
+
+        :param exclude_unique: Pass True to exclude unique gifts.
+
+        :param sort_by_price: Pass True to sort results by gift price instead of send date. Sorting is applied \
+        before pagination.
+
+        :param offset: Offset of the first entry to return as received from the previous request; \
+        use empty string to get the first chunk of results.
+
+        :param limit: The maximum number of gifts to be returned; 1-100. Defaults to 100.
+        """
+
+        method_response = await self.api.request_raw(
+            "getBusinessAccountGifts",
+            get_params(locals()),
+        )
+        return full_result(method_response, OwnedGifts)
+
+    async def convert_gift_to_stars(
+        self,
+        *,
+        business_connection_id: str,
+        owned_gift_id: str,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `convertGiftToStars`, see the [documentation](https://core.telegram.org/bots/api#convertgifttostars)
+
+        Converts a given regular gift to Telegram Stars. Requires the can_convert_gifts_to_stars
+        business bot right. Returns True on success.
+
+        :param business_connection_id: Unique identifier of the business connection.
+
+        :param owned_gift_id: Unique identifier of the regular gift that should be converted to Telegram \
+        Stars.
+        """
+
+        method_response = await self.api.request_raw(
+            "convertGiftToStars",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def upgrade_gift(
+        self,
+        *,
+        business_connection_id: str,
+        owned_gift_id: str,
+        keep_original_details: bool | None = None,
+        star_count: int | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `upgradeGift`, see the [documentation](https://core.telegram.org/bots/api#upgradegift)
+
+        Upgrades a given regular gift to a unique gift. Requires the can_transfer_and_upgrade_gifts
+        business bot right. Additionally requires the can_transfer_stars business
+        bot right if the upgrade is paid. Returns True on success.
+
+        :param business_connection_id: Unique identifier of the business connection.
+
+        :param owned_gift_id: Unique identifier of the regular gift that should be upgraded to a unique \
+        one.
+
+        :param keep_original_details: Pass True to keep the original gift text, sender and receiver in the upgraded \
+        gift.
+
+        :param star_count: The amount of Telegram Stars that will be paid for the upgrade from the business \
+        account balance. If gift.prepaid_upgrade_star_count > 0, then pass 0, \
+        otherwise, the can_transfer_stars business bot right is required and \
+        gift.upgrade_star_count must be passed.
+        """
+
+        method_response = await self.api.request_raw(
+            "upgradeGift",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def transfer_gift(
+        self,
+        *,
+        business_connection_id: str,
+        owned_gift_id: str,
+        new_owner_chat_id: int,
+        star_count: int | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `transferGift`, see the [documentation](https://core.telegram.org/bots/api#transfergift)
+
+        Transfers an owned unique gift to another user. Requires the can_transfer_and_upgrade_gifts
+        business bot right. Requires can_transfer_stars business bot right if
+        the transfer is paid. Returns True on success.
+
+        :param business_connection_id: Unique identifier of the business connection.
+
+        :param owned_gift_id: Unique identifier of the regular gift that should be transferred.
+
+        :param new_owner_chat_id: Unique identifier of the chat which will own the gift. The chat must be active \
+        in the last 24 hours.
+
+        :param star_count: The amount of Telegram Stars that will be paid for the transfer from the business \
+        account balance. If positive, then the can_transfer_stars business bot \
+        right is required.
+        """
+
+        method_response = await self.api.request_raw(
+            "transferGift",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def post_story(
+        self,
+        *,
+        business_connection_id: str,
+        content: InputStoryContent,
+        active_period: int,
+        caption: str | None = None,
+        parse_mode: str | None = default_params["parse_mode"],
+        caption_entities: list[MessageEntity] | None = None,
+        areas: list[StoryArea] | None = None,
+        post_to_chat_page: bool | None = None,
+        protect_content: bool | None = None,
+        **other: typing.Any,
+    ) -> Result[Story, APIError]:
+        """Method `postStory`, see the [documentation](https://core.telegram.org/bots/api#poststory)
+
+        Posts a story on behalf of a managed business account. Requires the can_manage_stories
+        business bot right. Returns Story on success.
+
+        :param business_connection_id: Unique identifier of the business connection.
+
+        :param content: Content of the story.
+
+        :param active_period: Period after which the story is moved to the archive, in seconds; must be \
+        one of 6 * 3600, 12 * 3600, 86400, or 2 * 86400.
+
+        :param caption: Caption of the story, 0-2048 characters after entities parsing.
+
+        :param parse_mode: Mode for parsing entities in the story caption. See formatting options \
+        for more details.
+
+        :param caption_entities: A JSON-serialized list of special entities that appear in the caption, \
+        which can be specified instead of parse_mode.
+
+        :param areas: A JSON-serialized list of clickable areas to be shown on the story.
+
+        :param post_to_chat_page: Pass True to keep the story accessible after it expires.
+
+        :param protect_content: Pass True if the content of the story must be protected from forwarding and \
+        screenshotting.
+        """
+
+        method_response = await self.api.request_raw(
+            "postStory",
+            get_params(locals()),
+        )
+        return full_result(method_response, Story)
+
+    async def edit_story(
+        self,
+        *,
+        business_connection_id: str,
+        story_id: int,
+        content: InputStoryContent,
+        caption: str | None = None,
+        parse_mode: str | None = default_params["parse_mode"],
+        caption_entities: list[MessageEntity] | None = None,
+        areas: list[StoryArea] | None = None,
+        **other: typing.Any,
+    ) -> Result[Story, APIError]:
+        """Method `editStory`, see the [documentation](https://core.telegram.org/bots/api#editstory)
+
+        Edits a story previously posted by the bot on behalf of a managed business
+        account. Requires the can_manage_stories business bot right. Returns
+        Story on success.
+
+        :param business_connection_id: Unique identifier of the business connection.
+
+        :param story_id: Unique identifier of the story to edit.
+
+        :param content: Content of the story.
+
+        :param caption: Caption of the story, 0-2048 characters after entities parsing.
+
+        :param parse_mode: Mode for parsing entities in the story caption. See formatting options \
+        for more details.
+
+        :param caption_entities: A JSON-serialized list of special entities that appear in the caption, \
+        which can be specified instead of parse_mode.
+
+        :param areas: A JSON-serialized list of clickable areas to be shown on the story.
+        """
+
+        method_response = await self.api.request_raw(
+            "editStory",
+            get_params(locals()),
+        )
+        return full_result(method_response, Story)
+
+    async def delete_story(
+        self,
+        *,
+        business_connection_id: str,
+        story_id: int,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `deleteStory`, see the [documentation](https://core.telegram.org/bots/api#deletestory)
+
+        Deletes a story previously posted by the bot on behalf of a managed business
+        account. Requires the can_manage_stories business bot right. Returns
+        True on success.
+
+        :param business_connection_id: Unique identifier of the business connection.
+
+        :param story_id: Unique identifier of the story to delete.
+        """
+
+        method_response = await self.api.request_raw(
+            "deleteStory",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
     async def edit_message_text(
         self,
         *,
@@ -3642,6 +4560,39 @@ class APIMethods[HTTPClient: ABCClient]:
         )
         return full_result(method_response, Variative[Message, bool])
 
+    async def edit_message_checklist(
+        self,
+        *,
+        business_connection_id: str,
+        chat_id: int,
+        message_id: int,
+        checklist: InputChecklist,
+        reply_markup: InlineKeyboardMarkup | None = None,
+        **other: typing.Any,
+    ) -> Result[Message, APIError]:
+        """Method `editMessageChecklist`, see the [documentation](https://core.telegram.org/bots/api#editmessagechecklist)
+
+        Use this method to edit a checklist on behalf of a connected business account.
+        On success, the edited Message is returned.
+
+        :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
+        will be sent.
+
+        :param chat_id: Unique identifier for the target chat.
+
+        :param message_id: Unique identifier for the target message.
+
+        :param checklist: A JSON-serialized object for the new checklist.
+
+        :param reply_markup: A JSON-serialized object for the new inline keyboard for the message.
+        """
+
+        method_response = await self.api.request_raw(
+            "editMessageChecklist",
+            get_params(locals()),
+        )
+        return full_result(method_response, Message)
+
     async def edit_message_reply_markup(
         self,
         *,
@@ -3712,6 +4663,63 @@ class APIMethods[HTTPClient: ABCClient]:
         )
         return full_result(method_response, Poll)
 
+    async def approve_suggested_post(
+        self,
+        *,
+        chat_id: int,
+        message_id: int,
+        send_date: datetime | int | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `approveSuggestedPost`, see the [documentation](https://core.telegram.org/bots/api#approvesuggestedpost)
+
+        Use this method to approve a suggested post in a direct messages chat. The
+        bot must have the 'can_post_messages' administrator right in the corresponding
+        channel chat. Returns True on success.
+
+        :param chat_id: Unique identifier for the target direct messages chat.
+
+        :param message_id: Identifier of a suggested post message to approve.
+
+        :param send_date: Point in time (Unix timestamp) when the post is expected to be published; \
+        omit if the date has already been specified when the suggested post was created. \
+        If specified, then the date must be not more than 2678400 seconds (30 days) \
+        in the future.
+        """
+
+        method_response = await self.api.request_raw(
+            "approveSuggestedPost",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
+    async def decline_suggested_post(
+        self,
+        *,
+        chat_id: int,
+        message_id: int,
+        comment: str | None = None,
+        **other: typing.Any,
+    ) -> Result[bool, APIError]:
+        """Method `declineSuggestedPost`, see the [documentation](https://core.telegram.org/bots/api#declinesuggestedpost)
+
+        Use this method to decline a suggested post in a direct messages chat. The
+        bot must have the 'can_manage_direct_messages' administrator right
+        in the corresponding channel chat. Returns True on success.
+
+        :param chat_id: Unique identifier for the target direct messages chat.
+
+        :param message_id: Identifier of a suggested post message to decline.
+
+        :param comment: Comment for the creator of the suggested post; 0-128 characters.
+        """
+
+        method_response = await self.api.request_raw(
+            "declineSuggestedPost",
+            get_params(locals()),
+        )
+        return full_result(method_response, bool)
+
     async def delete_message(
         self,
         *,
@@ -3730,8 +4738,10 @@ class APIMethods[HTTPClient: ABCClient]:
         messages in private chats. - Bots granted can_post_messages permissions
         can delete outgoing messages in channels. - If the bot is an administrator
         of a group, it can delete any message there. - If the bot has can_delete_messages
-        permission in a supergroup or a channel, it can delete any message there.
-        Returns True on success.
+        administrator right in a supergroup or a channel, it can delete any message
+        there. - If the bot has can_manage_direct_messages administrator right
+        in a channel, it can delete any message in the corresponding direct messages
+        chat. Returns True on success.
 
         :param chat_id: Unique identifier for the target chat or username of the target channel \
         (in the format @channelusername).
@@ -3778,11 +4788,13 @@ class APIMethods[HTTPClient: ABCClient]:
         sticker: InputFile | str,
         business_connection_id: str | None = None,
         message_thread_id: int | None = None,
+        direct_messages_topic_id: int | None = None,
         emoji: str | None = None,
         disable_notification: bool | None = None,
         protect_content: bool | None = None,
         allow_paid_broadcast: bool | None = None,
         message_effect_id: str | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         reply_parameters: ReplyParameters | None = None,
         reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply | None = None,
         **other: typing.Any,
@@ -3800,6 +4812,9 @@ class APIMethods[HTTPClient: ABCClient]:
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
         forum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
+        required if the message is sent to a direct messages chat.
 
         :param sticker: Sticker to send. Pass a file_id as String to send a file that exists on the \
         Telegram servers (recommended), pass an HTTP URL as a String for Telegram \
@@ -3820,6 +4835,10 @@ class APIMethods[HTTPClient: ABCClient]:
 
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for private \
         chats only.
+
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested post \
+        to send; for direct messages chats only. If the message is sent as a reply \
+        to another suggested post, then that suggested post is automatically declined. \
 
         :param reply_parameters: Description of the message to reply to.
 
@@ -4231,150 +5250,6 @@ class APIMethods[HTTPClient: ABCClient]:
         )
         return full_result(method_response, bool)
 
-    async def get_available_gifts(self, **other: typing.Any) -> Result[Gifts, APIError]:
-        """Method `getAvailableGifts`, see the [documentation](https://core.telegram.org/bots/api#getavailablegifts)
-
-        Returns the list of gifts that can be sent by the bot to users. Requires no
-        parameters. Returns a Gifts object.
-        """
-
-        method_response = await self.api.request_raw(
-            "getAvailableGifts",
-            get_params(locals()),
-        )
-        return full_result(method_response, Gifts)
-
-    async def send_gift(
-        self,
-        *,
-        user_id: int,
-        gift_id: str,
-        pay_for_upgrade: bool | None = None,
-        text: str | None = None,
-        text_parse_mode: str | None = None,
-        text_entities: list[MessageEntity] | None = None,
-        **other: typing.Any,
-    ) -> Result[bool, APIError]:
-        """Method `sendGift`, see the [documentation](https://core.telegram.org/bots/api#sendgift)
-
-        Sends a gift to the given user. The gift can't be converted to Telegram Stars
-        by the user. Returns True on success.
-
-        :param user_id: Unique identifier of the target user that will receive the gift.
-
-        :param gift_id: Identifier of the gift.
-
-        :param pay_for_upgrade: Pass True to pay for the gift upgrade from the bot's balance, thereby making \
-        the upgrade free for the receiver.
-
-        :param text: Text that will be shown along with the gift; 0-255 characters.
-
-        :param text_parse_mode: Mode for parsing entities in the text. See formatting options for more details. \
-        Entities other than `bold`, `italic`, `underline`, `strikethrough`, \
-        `spoiler`, and `custom_emoji` are ignored.
-
-        :param text_entities: A JSON-serialized list of special entities that appear in the gift text. \
-        It can be specified instead of text_parse_mode. Entities other than `bold`, \
-        `italic`, `underline`, `strikethrough`, `spoiler`, and `custom_emoji` \
-        are ignored.
-        """
-
-        method_response = await self.api.request_raw(
-            "sendGift",
-            get_params(locals()),
-        )
-        return full_result(method_response, bool)
-
-    async def verify_user(
-        self,
-        *,
-        user_id: int,
-        custom_description: str | None = None,
-        **other: typing.Any,
-    ) -> Result[bool, APIError]:
-        """Method `verifyUser`, see the [documentation](https://core.telegram.org/bots/api#verifyuser)
-
-        Verifies a user on behalf of the organization which is represented by the
-        bot. Returns True on success.
-
-        :param user_id: Unique identifier of the target user.
-
-        :param custom_description: Custom description for the verification; 0-70 characters. Must be empty \
-        if the organization isn't allowed to provide a custom verification description. \
-        """
-
-        method_response = await self.api.request_raw(
-            "verifyUser",
-            get_params(locals()),
-        )
-        return full_result(method_response, bool)
-
-    async def verify_chat(
-        self,
-        *,
-        chat_id: int | str,
-        custom_description: str | None = None,
-        **other: typing.Any,
-    ) -> Result[bool, APIError]:
-        """Method `verifyChat`, see the [documentation](https://core.telegram.org/bots/api#verifychat)
-
-        Verifies a chat on behalf of the organization which is represented by the
-        bot. Returns True on success.
-
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
-
-        :param custom_description: Custom description for the verification; 0-70 characters. Must be empty \
-        if the organization isn't allowed to provide a custom verification description. \
-        """
-
-        method_response = await self.api.request_raw(
-            "verifyChat",
-            get_params(locals()),
-        )
-        return full_result(method_response, bool)
-
-    async def remove_user_verification(
-        self,
-        *,
-        user_id: int,
-        **other: typing.Any,
-    ) -> Result[bool, APIError]:
-        """Method `removeUserVerification`, see the [documentation](https://core.telegram.org/bots/api#removeuserverification)
-
-        Removes verification from a user who is currently verified on behalf of
-        the organization represented by the bot. Returns True on success.
-
-        :param user_id: Unique identifier of the target user.
-        """
-
-        method_response = await self.api.request_raw(
-            "removeUserVerification",
-            get_params(locals()),
-        )
-        return full_result(method_response, bool)
-
-    async def remove_chat_verification(
-        self,
-        *,
-        chat_id: int | str,
-        **other: typing.Any,
-    ) -> Result[bool, APIError]:
-        """Method `removeChatVerification`, see the [documentation](https://core.telegram.org/bots/api#removechatverification)
-
-        Removes verification from a chat that is currently verified on behalf of
-        the organization represented by the bot. Returns True on success.
-
-        :param chat_id: Unique identifier for the target chat or username of the target channel \
-        (in the format @channelusername).
-        """
-
-        method_response = await self.api.request_raw(
-            "removeChatVerification",
-            get_params(locals()),
-        )
-        return full_result(method_response, bool)
-
     async def answer_inline_query(
         self,
         *,
@@ -4485,6 +5360,7 @@ class APIMethods[HTTPClient: ABCClient]:
         currency: Currency,
         prices: list[LabeledPrice],
         message_thread_id: int | None = None,
+        direct_messages_topic_id: int | None = None,
         provider_token: str | None = None,
         max_tip_amount: int | None = None,
         suggested_tip_amounts: list[int] | None = None,
@@ -4505,6 +5381,7 @@ class APIMethods[HTTPClient: ABCClient]:
         protect_content: bool | None = None,
         allow_paid_broadcast: bool | None = None,
         message_effect_id: str | None = None,
+        suggested_post_parameters: SuggestedPostParameters | None = None,
         reply_parameters: ReplyParameters | None = None,
         reply_markup: InlineKeyboardMarkup | None = None,
         **other: typing.Any,
@@ -4518,6 +5395,9 @@ class APIMethods[HTTPClient: ABCClient]:
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
         forum supergroups only.
+
+        :param direct_messages_topic_id: Identifier of the direct messages topic to which the message will be sent; \
+        required if the message is sent to a direct messages chat.
 
         :param title: Product name, 1-32 characters.
 
@@ -4600,6 +5480,10 @@ class APIMethods[HTTPClient: ABCClient]:
         :param message_effect_id: Unique identifier of the message effect to be added to the message; for private \
         chats only.
 
+        :param suggested_post_parameters: A JSON-serialized object containing the parameters of the suggested post \
+        to send; for direct messages chats only. If the message is sent as a reply \
+        to another suggested post, then that suggested post is automatically declined. \
+
         :param reply_parameters: Description of the message to reply to.
 
         :param reply_markup: A JSON-serialized object for an inline keyboard. If empty, one 'Pay total \
@@ -4669,7 +5553,7 @@ class APIMethods[HTTPClient: ABCClient]:
         is used. Currently, it must always be 2592000 (30 days) if specified. Any \
         number of subscriptions can be active for a given bot at the same time, including \
         multiple concurrent subscriptions from the same user. Subscription price \
-        must no exceed 2500 Telegram Stars.
+        must no exceed 10000 Telegram Stars.
 
         :param max_tip_amount: The maximum accepted amount for tips in the smallest units of the currency \
         (integer, not float/double). For example, for a maximum tip of US$ 1.45 \
@@ -4793,6 +5677,19 @@ class APIMethods[HTTPClient: ABCClient]:
             get_params(locals()),
         )
         return full_result(method_response, bool)
+
+    async def get_my_star_balance(self, **other: typing.Any) -> Result[StarAmount, APIError]:
+        """Method `getMyStarBalance`, see the [documentation](https://core.telegram.org/bots/api#getmystarbalance)
+
+        A method to get the current Telegram Stars balance of the bot. Requires no
+        parameters. On success, returns a StarAmount object.
+        """
+
+        method_response = await self.api.request_raw(
+            "getMyStarBalance",
+            get_params(locals()),
+        )
+        return full_result(method_response, StarAmount)
 
     async def get_star_transactions(
         self,
@@ -4920,7 +5817,8 @@ class APIMethods[HTTPClient: ABCClient]:
         :param business_connection_id: Unique identifier of the business connection on behalf of which the message \
         will be sent.
 
-        :param chat_id: Unique identifier for the target chat.
+        :param chat_id: Unique identifier for the target chat. Games can't be sent to channel direct \
+        messages chats and channel chats.
 
         :param message_thread_id: Unique identifier for the target message thread (topic) of the forum; for \
         forum supergroups only.
